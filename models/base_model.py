@@ -14,11 +14,18 @@ class BaseModel:
     created_at = datetime.datetime.now()
     updated_at = datetime.datetime.now()
 
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs):
         """It will initiate the object"""
         self.id = __class__.id
         self.created_at = __class__.created_at
         self.updated_at = __class__.updated_at
+        if args == 0:
+            for k, v in kwargs.items():
+                if k == '__class__':
+                    continue
+                elif k == 'updated_at' or k == 'created_at':
+                    self.__setattr__(k, datetime.datetime.fromisoformat(v))
+                self.__setattr__(k, v)
 
     def __str__(self):
         """returns the string representation"""
