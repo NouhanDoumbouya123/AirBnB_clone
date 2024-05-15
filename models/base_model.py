@@ -4,6 +4,7 @@
     that defines all common attributes/methods
     for other classes
 """
+from models import storage
 import uuid
 import datetime
 
@@ -19,6 +20,7 @@ class BaseModel:
         self.id = __class__.id
         self.created_at = __class__.created_at
         self.updated_at = __class__.updated_at
+        storage.new(self)
         if args == 0:
             for k, v in kwargs.items():
                 if k == '__class__':
@@ -34,6 +36,7 @@ class BaseModel:
     def save(self):
         """update the object"""
         self.updated_at = datetime.datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
@@ -42,7 +45,7 @@ class BaseModel:
         """
         created = self.created_at.isoformat()
         updated = self.updated_at.isoformat()
-        json_obj = self.__dict__
+        json_obj = self.__dict__.copy()
         json_obj.update({"__class__": __class__.__name__,
                          "updated_at": updated,
                          "created_at": created})
