@@ -44,9 +44,33 @@ class HBNBCommand(cmd.Cmd):
             if cls:
                 my_model = cls()
                 my_model.save()
-                print(my_model)
+                print(my_model.id)
             else:
                 print("** class doesn't exist **")
+
+    def help_create(self):
+        print("create: Creates a new instance of BaseModel, \
+              saves it (to the JSON file) and prints the id")
+
+    def do_show(self, arg):
+        name, id = arg.split()
+        if not name:
+            print("** instance id is missing **")
+            return
+        elif not id:
+            print("** class name missing **")
+            return
+        cls = globals().get(name)
+        if cls is None:
+            print("** class doesn't exist **")
+            return
+        count = 0
+        objects = storage.all()
+        if f"{name}.{id}" in objects.keys():
+            print(cls())
+            count += 1
+        if count == 0:
+            print("** no instance found **")
 
 
 if __name__ == "__main__":
