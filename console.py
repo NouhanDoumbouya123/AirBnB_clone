@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
 
     def help_quit(self):
         """documenting the commands"""
-        print("syntax: Quit command to exit the program")
+        print("Quit command to exit the program")
 
     def do_EOF(self, arg):
         """Translating the EOF"""
@@ -42,7 +42,8 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_create(self, name):
-        if name == "" or name == None:
+        """To create instances"""
+        if name == "" or name is None:
             print("** class name missing **")
         else:
             cls = globals().get(name)
@@ -58,6 +59,7 @@ class HBNBCommand(cmd.Cmd):
               saves it (to the JSON file) and prints the id")
 
     def do_show(self, arg):
+        """To show the instances"""
         args = arg.split()
         if len(args) < 1:
             print("** class name missing **")
@@ -80,6 +82,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, arg):
+        """To destroy an instance"""
         args = arg.split()
         if len(args) < 1:
             print("** class name is missing **")
@@ -105,6 +108,7 @@ class HBNBCommand(cmd.Cmd):
         """Printing all instances of base"""
         classes = {
                 'BaseModel': BaseModel,
+                'User': User,
                 }
         objects = storage.all()
         if arg:
@@ -112,14 +116,15 @@ class HBNBCommand(cmd.Cmd):
             if class_name not in classes:
                 print("** class doesn't exist **")
                 return
-            results = [str(obj) for obj in objects.values() if obj.__class__.__name__ == class_name]
+            results = [str(obj) for obj in objects.values()
+                       if obj.__class__.__name__ == class_name]
         else:
             results = [str(obj) for obj in objects.values()]
         print(results)
 
     def do_update(self, arg):
         """Update an instance based on class name and id"""
-        args = arg.split()
+        args = arg.split()[:4]
 
         if len(args) < 1:
             print("** class name missing **")
@@ -154,15 +159,18 @@ class HBNBCommand(cmd.Cmd):
 
             # Check if attribute exists in the class
             if not hasattr(cls, attr_name):
-                print(f"** Attribute '{attr_name}' doesn't exist for class '{class_name}' **")
+                print(f"** Attribute '{attr_name}' doesn't exist"
+                      f"for class '{class_name}' **")
                 return
 
             # Get the instance
             instance = storage.all()[key]
 
-            # Check if the attribute is id, created_at, or updated_at (which cannot be updated)
+            # Check if the attribute is id, created_at
+            # or updated_at (which cannot be updated)
             if attr_name in ["id", "created_at", "updated_at"]:
-                print("** Cannot update 'id', 'created_at', or 'updated_at' **")
+                print("** Cannot update 'id', "
+                      "'created_at', or 'updated_at' **")
                 return
 
             # Cast attribute value to the attribute type
@@ -177,5 +185,18 @@ class HBNBCommand(cmd.Cmd):
             setattr(instance, attr_name, attr_value)
             instance.save()
 
-if __name__ == "__main__":
+    def default(self, line):
+        """Handle the default unrecognized command"""
+        parts = line.split(".")
+        if len(parts) == 2:
+            class_name, command = parts
+            if command == "all()":
+                self.do_all(class_name)
+            else:
+                print("Unknown syntax")
+        else:
+            print("Enter the correct number of command")
+
+
+if __name__ == '__main__':
     HBNBCommand().cmdloop()
