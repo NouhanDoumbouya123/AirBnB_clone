@@ -89,6 +89,22 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
         else:
             print("** no instance found **")
+    
+    def do_all(self, arg):
+        """Printing all instances of base"""
+        classes = {
+                'BaseModel': BaseModel,
+                }
+        objects = storage.all()
+        if arg:
+            class_name = arg.strip()
+            if class_name not in classes:
+                print("** class doesn't exist **")
+                return
+            results = [str(obj) for obj in objects.values() if obj.__class__.__name__ == class_name]
+        else:
+            results = [str(obj) for obj in objects.values()]
+        print(results)
 
 
 if __name__ == "__main__":
