@@ -52,13 +52,15 @@ class HBNBCommand(cmd.Cmd):
               saves it (to the JSON file) and prints the id")
 
     def do_show(self, arg):
-        name, id = arg.split()
-        if not name:
-            print("** instance id is missing **")
-            return
-        elif not id:
+        args = arg.split()
+        if len(args) < 1:
             print("** class name missing **")
             return
+        elif len(args) < 2:
+            print("** instance id missing **")
+            return
+        else:
+            name, id = args
         cls = globals().get(name)
         if cls is None:
             print("** class doesn't exist **")
@@ -72,11 +74,15 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, arg):
-        name, id = arg.split()
-        if not name:
+        args = arg.split()
+        if len(args) < 1:
             print("** class name is missing **")
-        if not id:
+            return
+        if len(args) < 2:
             print("** instance id missing **")
+            return
+        else:
+            name, id = args
         cls = globals().get(name)
         if cls is None:
             print("** class doesn't exist **")
