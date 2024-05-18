@@ -12,6 +12,7 @@ from models.state import State
 import json
 import os
 
+
 class FileStorage:
     """
     Serializes instances to a JSON file
@@ -44,7 +45,9 @@ class FileStorage:
                 existing_data = json.load(file)
 
         # update the data with the new objects
-        new_data = {key: obj.to_dict() for key, obj in self.__objects.items() if isinstance(obj, BaseModel)}
+        new_data = {key: obj.to_dict()
+                    for key, obj in self.__objects.items()
+                    if isinstance(obj, BaseModel)}
 
         existing_data.update(new_data)
 
