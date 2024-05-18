@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
 
     def help_quit(self):
         """documenting the commands"""
-        print("syntax: Quit command to exit the program")
+        print("Quit command to exit the program")
 
     def do_EOF(self, arg):
         """Translating the EOF"""
@@ -42,6 +42,7 @@ class HBNBCommand(cmd.Cmd):
         return
 
     def do_create(self, name):
+        """To create instances"""
         if name == "" or name is None:
             print("** class name missing **")
         else:
@@ -58,6 +59,7 @@ class HBNBCommand(cmd.Cmd):
               saves it (to the JSON file) and prints the id")
 
     def do_show(self, arg):
+        """To show the instances"""
         args = arg.split()
         if len(args) < 1:
             print("** class name missing **")
@@ -80,6 +82,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, arg):
+        """To destroy an instance"""
         args = arg.split()
         if len(args) < 1:
             print("** class name is missing **")
@@ -156,8 +159,8 @@ class HBNBCommand(cmd.Cmd):
 
             # Check if attribute exists in the class
             if not hasattr(cls, attr_name):
-                print(f"** Attribute '{attr_name}' doesn't exist /
-                      for class '{class_name}' **")
+                print(f"** Attribute '{attr_name}' doesn't exist"
+                      f"for class '{class_name}' **")
                 return
 
             # Get the instance
@@ -166,8 +169,8 @@ class HBNBCommand(cmd.Cmd):
             # Check if the attribute is id, created_at
             # or updated_at (which cannot be updated)
             if attr_name in ["id", "created_at", "updated_at"]:
-                print("** Cannot update 'id', /
-                      'created_at', or 'updated_at' **")
+                print("** Cannot update 'id', "
+                      "'created_at', or 'updated_at' **")
                 return
 
             # Cast attribute value to the attribute type
