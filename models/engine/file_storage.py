@@ -2,9 +2,9 @@
 """
 This module include the FileStorage
 """
+from models.base_model import BaseModel
 import json
 import os
-
 
 class FileStorage:
     """
@@ -38,9 +38,7 @@ class FileStorage:
                 existing_data = json.load(file)
 
         # update the data with the new objects
-        for key, obj in self.__objects.items():
-            if type(obj) is not dict:
-                new_data = {key: obj.to_dict()}
+        new_data = {key: obj.to_dict() for key, obj in self.__objects.items() if isinstance(obj, BaseModel)}
 
         existing_data.update(new_data)
 
@@ -57,4 +55,6 @@ class FileStorage:
             with open(self.__file_path, "r") as file:
                 obj_dict = json.load(file)
                 for key, value in obj_dict.items():
-                    self.__objects[key] = value
+                    cls_name = value['__class__']
+                    cls = globals().get(cls_name)
+                    self.__objects[key] = cls(**value)
