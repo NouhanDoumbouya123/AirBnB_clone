@@ -8,6 +8,8 @@ import models
 import uuid
 from datetime import datetime
 
+time = "%Y-%m-%dT%H:%M:%S.%f"
+
 
 class BaseModel:
     """
@@ -45,8 +47,10 @@ class BaseModel:
         First piece of the serialization/deserialization process
         create dictionary representation of our class (BaseModel)
         """
-        obj_dict = self.__dict__.copy()
-        obj_dict["__class__"] = self.__class__.__name__
-        obj_dict["created_at"] = self.created_at.isoformat()
-        obj_dict["updated_at"] = self.updated_at.isoformat()
-        return obj_dict
+        new_dict = self.__dict__.copy()
+        if "created_at" in new_dict:
+            new_dict["created_at"] = new_dict["created_at"].strftime(time)
+        if "updated_at" in new_dict:
+            new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
+        new_dict["__class__"] = self.__class__.__name__
+        return new_dict
