@@ -21,7 +21,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(old_updated_at, self.base_model.updated_at)
 
     def test_str(self):
-        expected_str = f"[BaseModel] ({self.base_model.id}) {self.base_model.__dict__}"
+        expected_str = f"[BaseModel]\
+        ({self.base_model.id}) {self.base_model.__dict__}"
         self.assertEqual(str(self.base_model), expected_str)
 
     def test_to_dict(self):
