@@ -10,7 +10,9 @@ from datetime import datetime
 
 
 class BaseModel:
-    """this class will be the base model"""
+    """
+    This class will be the base model
+    """
 
     def __init__(self, *args, **kwargs):
         """It will initiate the object"""
@@ -27,11 +29,11 @@ class BaseModel:
                 self.__setattr__(k, v)
 
     def __str__(self):
-        """returns the string representation"""
+        """Returns the string representation"""
         return f"[{__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
-        """update the object"""
+        """Update the object"""
         self.updated_at = datetime.now()
         models.storage.save()
 
