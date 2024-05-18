@@ -100,6 +100,7 @@ class HBNBCommand(cmd.Cmd):
         """Printing all instances of base"""
         classes = {
                 'BaseModel': BaseModel,
+                'User': User,
                 }
         objects = storage.all()
         if arg:
@@ -171,6 +172,18 @@ class HBNBCommand(cmd.Cmd):
             # Update the attribute value and save the changes
             setattr(instance, attr_name, attr_value)
             instance.save()
+
+    def default(self, line):
+        """Handle the default unrecognized command"""
+        parts = line.split(".")
+        if len(parts) == 2:
+            class_name, command = parts
+            if command == "all()":
+                self.do_all(class_name)
+            else:
+                print("Unknown syntax")
+        else:
+            print("Enter the correct number of command")
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
