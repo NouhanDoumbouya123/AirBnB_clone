@@ -113,7 +113,8 @@ class HBNBCommand(cmd.Cmd):
             if class_name not in classes:
                 print("** class doesn't exist **")
                 return
-            results = [str(obj) for obj in objects.values() if obj.__class__.__name__ == class_name]
+            results = [str(obj) for obj in objects.values() /
+                    if obj.__class__.__name__ == class_name]
         else:
             results = [str(obj) for obj in objects.values()]
         print(results)
@@ -155,15 +156,18 @@ class HBNBCommand(cmd.Cmd):
 
             # Check if attribute exists in the class
             if not hasattr(cls, attr_name):
-                print(f"** Attribute '{attr_name}' doesn't exist for class '{class_name}' **")
+                print(f"** Attribute '{attr_name}' doesn't exist/
+                        for class '{class_name}' **")
                 return
 
             # Get the instance
             instance = storage.all()[key]
 
-            # Check if the attribute is id, created_at, or updated_at (which cannot be updated)
+            # Check if the attribute is id, created_at, 
+            # or updated_at (which cannot be updated)
             if attr_name in ["id", "created_at", "updated_at"]:
-                print("** Cannot update 'id', 'created_at', or 'updated_at' **")
+                print("** Cannot update 'id',/
+                        'created_at', or 'updated_at' **")
                 return
 
             # Cast attribute value to the attribute type
