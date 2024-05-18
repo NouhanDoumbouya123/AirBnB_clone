@@ -195,5 +195,5 @@ class HBNBCommand(cmd.Cmd):
             print("Enter the correct number of command")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     HBNBCommand().cmdloop()
