@@ -16,7 +16,7 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """It will initiate the object"""
-        if args == 0:
+        if kwargs:
             for k, v in kwargs.items():
                 if k == '__class__':
                     continue
@@ -45,10 +45,8 @@ class BaseModel:
         First piece of the serialization/deserialization process
         create dictionary representation of our class (BaseModel)
         """
-        created = self.created_at.isoformat()
-        updated = self.updated_at.isoformat()
-        json_obj = self.__dict__.copy()
-        json_obj.update({"__class__": __class__.__name__,
-                         "updated_at": updated,
-                         "created_at": created})
-        return json_obj
+        obj_dict = self.__dict__.copy()
+        obj_dict["__class__"] = self.__class__.__name__
+        obj_dict["created_at"] = self.created_at.isoformat()
+        obj_dict["updated_at"] = self.updated_at.isoformat()
+        return obj_dict
