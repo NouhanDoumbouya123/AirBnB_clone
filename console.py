@@ -84,8 +84,8 @@ class HBNBCommand(cmd.Cmd):
                 return
             results = [str(obj) for obj in objects.values() if obj.__class__.__name__ == class_name]
         else:
-            result = [str(obj) for obj in objects.values()]
-        print(result)
+            results = [str(obj) for obj in objects.values()]
+        print(results)
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
