@@ -3,7 +3,7 @@
 This module include the FileStorage
 """
 from models.base_model import BaseModel
-from models.User import User
+from models.user import User
 import json
 import os
 
