@@ -9,6 +9,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 import shlex
+import json
 import cmd
 
 
@@ -75,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         elif len(args) < 2:
-            print("** cls id missing **")
+            print("** instance id missing **")
             return
         else:
             name, id = args
@@ -88,10 +89,10 @@ class HBNBCommand(cmd.Cmd):
         if key in objects:
             print(str(objects[key]))
         else:
-            print("** no cls found **")
+            print("** no instance found **")
 
     def do_destroy(self, arg):
-        """To destroy an cls"""
+        """To destroy an instance"""
         args = shlex.split(arg)
         if len(args) < 1:
             print("** class name missing **")
@@ -126,16 +127,19 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         objects = storage.all()
         data = shlex.split(arg)
-        if data[0]:
-            class_name = data[0].strip("")
-            if class_name not in classes:
-                print("** class doesn't exist **")
-                return
-            results = [str(obj) for obj in objects.values()
-                       if obj.__class__.__name__ == class_name]
+        my_json = []
+        if not arg:
+            for key in objects:
+                my_json.append(str(objects[key]))
+            print(json.dumps(my_json))
+            return
+        if data[0] in HBNBCommand.my_dict.keys():
+            for key in objects:
+                if data[0] in key:
+                    my_json.append(str(objects[key]))
+            print(json.dumps(my_json))
         else:
-            results = [str(obj) for obj in objects.values()]
-        print(results)
+            print("** class doesn't exist **")
 
     def do_update(self, arg):
         """Update an cls based on class name and id"""
