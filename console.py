@@ -141,67 +141,44 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_update(self, arg):
-        """Update an cls based on class name and id"""
-        args = shlex.split(arg)[:4]
-
-        if len(args) < 1:
+def do_update(self, arg):
+        """
+        Updates an instance based on the class name and
+        id by adding or updating attribute
+        (save the change into the JSON file).
+        Structure: update [class name] [id] [arg_name] [arg_value]
+        """
+        if not arg:
             print("** class name missing **")
             return
-        elif len(args) < 2:
-            print("** cls id missing **")
+        my_data = shlex.split(arg)
+        storage.reload()
+        objs_dict = storage.all()
+        if my_data[0] not in HBNBCommand.my_dict.keys():
+            print("** class doesn't exist **")
             return
-        elif len(args) < 3:
+        if (len(my_data) == 1):
+            print("** instance id missing **")
+            return
+        try:
+            key = my_data[0] + "." + my_data[1]
+            objs_dict[key]
+        except KeyError:
+            print("** no instance found **")
+            return
+        if (len(my_data) == 2):
             print("** attribute name missing **")
             return
-        elif len(args) < 4:
+        if (len(my_data) == 3):
             print("** value missing **")
             return
+        my_instance = objs_dict[key]
+        if hasattr(my_instance, my_data[2]):
+            data_type = type(getattr(my_instance, my_data[2]))
+            setattr(my_instance, my_data[2], data_type(my_data[3]))
         else:
-            class_name, obj_id, attr_name, attr_value = args
+            setattr(my_instance, my_data[2], my_data[3])
+        storage.save()
 
-        # Check if class exists
-        if class_name not in HBNBCommand.my_dict.keys():
-            print("** Class doesn't exist **")
-            return
-
-        # Check if cls exists
-        key = f"{class_name}.{obj_id}"
-        if key not in storage.all():
-            print("** no cls found **")
-            return
-
-        storage.reload()
-        cls = storage.all()[key]
-
-        # Check if attribute exists in the class
-        if class_name != "BaseModel":
-            if not hasattr(cls, attr_name):
-                print(f"** Attribute '{attr_name}' doesn't exist"
-                        f" for class '{class_name}' **")
-                return
-
-        # Check if the attribute is id, created_at
-        # or updated_at (which cannot be updated)
-        if attr_name in ["id", "created_at", "updated_at"]:
-            print("** Cannot update 'id', "
-                    "'created_at', or 'updated_at' **")
-            return
-
-        # Cast attribute value to the attribute type
-        try:
-            attr_type = type(getattr(cls, attr_name))
-            attr_value = attr_type(attr_value)
-        except ValueError:
-            print("** Invalid value type for the attribute **")
-            return
-        except AttributeError:
-            pass
-
-        # Update the attribute value and save the changes
-        setattr(cls, attr_name, attr_value)
-        cls.save()
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()
