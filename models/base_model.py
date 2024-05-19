@@ -37,8 +37,10 @@ class BaseModel:
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
-        """Update the object
-        The updated_at  iwth the current time"""
+        """
+        Update the object
+        The updated_at  iwth the current time
+        """
         self.updated_at = datetime.now()
         models.storage.save()
 
