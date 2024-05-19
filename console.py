@@ -17,9 +17,13 @@ class HBNBCommand(cmd.Cmd):
     """A command line simulation"""
     prompt = "(hbnb) "
 
+    def do_nothing(self, arg):
+        """Does nothing"""
+        pass
+
     def do_quit(self, arg):
         """The quit command"""
-        sys.exit()
+        return True
 
     def help_quit(self):
         """documenting the commands"""
@@ -27,8 +31,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """Translating the EOF"""
-        print()
-        sys.exit(127)
+        print("")
+        return True
 
     def help_EOF(self):
         """documenting the commands"""
@@ -37,12 +41,13 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         """Overide the emptyline method"""
-        return
+        pass
 
     def do_create(self, arg):
         """To create instances"""
         if not arg:
             print("** class name missing **")
+            return
         my_data = shlex.split(arg)
         cls = globals().get(my_data[0])
         if cls:
@@ -58,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """To show the instances"""
-        args = shlex.split()
+        args = shlex.split(arg)
         if len(args) < 1:
             print("** class name missing **")
             return
@@ -83,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arg):
         """To destroy an instance"""
-        args = shlex.split()
+        args = shlex.split(arg)
         if len(args) < 1:
             print("** class name missing **")
             return
@@ -112,8 +117,9 @@ class HBNBCommand(cmd.Cmd):
                 }
         storage.reload()
         objects = storage.all()
-        if arg:
-            class_name = shlex.strip()
+        data = shlex.split(arg)
+        if data[0]:
+            class_name = data[0].strip("")
             if class_name not in classes:
                 print("** class doesn't exist **")
                 return
