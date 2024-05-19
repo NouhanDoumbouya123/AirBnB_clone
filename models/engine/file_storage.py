@@ -38,18 +38,10 @@ class FileStorage:
         Serializes objects to the JSON file
         """
 
-        # read existing data
         existing_data = {}
-        if os.path.exists(self.__file_path):
-            with open(self.__file_path, "r") as file:
-                existing_data = json.load(file)
 
-        # update the data with the new objects
-        new_data = {key: obj.to_dict()
-                    for key, obj in self.__objects.items()
-                    if isinstance(obj, BaseModel)}
-
-        existing_data.update(new_data)
+        for key in self.__objects:
+            existing_data[key] = self.__objects[key].to_dict()
 
         # write it to the file
         with open(self.__file_path, "w") as file:
@@ -63,7 +55,7 @@ class FileStorage:
                 os.path.getsize(self.__file_path) > 0:
             with open(self.__file_path, "r") as file:
                 obj_dict = json.load(file)
-                for key, value in obj_dict.items():
-                    cls_name = value['__class__']
-                    cls = globals().get(cls_name)
-                    self.__objects[key] = cls(**value)
+            for key, value in obj_dict.items():
+                cls_name = value['__class__']
+                cls = globals().get(cls_name)
+                self.__objects[key] = cls(**value)

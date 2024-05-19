@@ -74,11 +74,13 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         count = 0
+        storage.reload()
         objects = storage.all()
-        if f"{name}.{id}" in objects.keys():
-            print(cls())
+        key = f"{name}.{id}"
+        if key in objects:
+            print(str(objects[key]))
             count += 1
-        if count == 0:
+        else:
             print("** no instance found **")
 
     def do_destroy(self, arg):
@@ -95,11 +97,11 @@ class HBNBCommand(cmd.Cmd):
         cls = globals().get(name)
         if cls is None:
             print("** class doesn't exist **")
-
+        storage.reload()
         objects = storage.all()
         key = f"{name}.{id}"
-        if key in objects.keys():
-            objects.pop(key)
+        if key in objects:
+            del(objects[key])
             storage.save()
         else:
             print("** no instance found **")
@@ -110,6 +112,7 @@ class HBNBCommand(cmd.Cmd):
                 'BaseModel': BaseModel,
                 'User': User,
                 }
+        storage.reload()
         objects = storage.all()
         if arg:
             class_name = arg.strip()
@@ -158,12 +161,14 @@ class HBNBCommand(cmd.Cmd):
                 return
 
             # Check if attribute exists in the class
-            if not hasattr(cls, attr_name):
-                print(f"** Attribute '{attr_name}' doesn't exist"
-                      f" for class '{class_name}' **")
-                return
+            if class_name != "BaseModel":
+                if not hasattr(cls, attr_name):
+                    print(f"** Attribute '{attr_name}' doesn't exist"
+                          f" for class '{class_name}' **")
+                    return
 
             # Get the instance
+            storage.reload()
             instance = storage.all()[key]
 
             # Check if the attribute is id, created_at
@@ -174,12 +179,14 @@ class HBNBCommand(cmd.Cmd):
                 return
 
             # Cast attribute value to the attribute type
-            attr_type = type(getattr(cls, attr_name))
             try:
+                attr_type = type(getattr(cls, attr_name))
                 attr_value = attr_type(attr_value)
             except ValueError:
                 print("** Invalid value type for the attribute **")
                 return
+            except AttributeError:
+                pass
 
             # Update the attribute value and save the changes
             setattr(instance, attr_name, attr_value)
