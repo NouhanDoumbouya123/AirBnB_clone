@@ -41,12 +41,12 @@ class HBNBCommand(cmd.Cmd):
         """Overide the emptyline method"""
         return
 
-    def do_create(self, name):
+    def do_create(self, arg):
         """To create instances"""
-        if name == "" or name is None:
+        if not arg:
             print("** class name missing **")
         else:
-            cls = globals().get(name)
+            cls = globals().get(arg)
             if cls:
                 my_model = cls()
                 my_model.save()
@@ -85,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
         """To destroy an instance"""
         args = arg.split()
         if len(args) < 1:
-            print("** class name is missing **")
+            print("** class name missing **")
             return
         if len(args) < 2:
             print("** instance id missing **")
@@ -160,7 +160,7 @@ class HBNBCommand(cmd.Cmd):
             # Check if attribute exists in the class
             if not hasattr(cls, attr_name):
                 print(f"** Attribute '{attr_name}' doesn't exist"
-                      f"for class '{class_name}' **")
+                      f" for class '{class_name}' **")
                 return
 
             # Get the instance

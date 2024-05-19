@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Test BaseModel for expected behavior and documentation"""
 import unittest
 from unittest.mock import patch
 from datetime import datetime
@@ -7,12 +8,13 @@ import uuid
 
 
 class TestBaseModel(unittest.TestCase):
+    """Test the BaseModel class"""
     def setUp(self):
         """Set up for the tests"""
         self.base_model = BaseModel()
 
-    def test_init_no_kwargs(self):
-        """Test initialization without kwargs"""
+    def test_init(self):
+        """testing the initiation of the object"""
         self.assertIsInstance(self.base_model, BaseModel)
         self.assertIsInstance(self.base_model.id, str)
         self.assertIsInstance(self.base_model.created_at, datetime)
@@ -48,6 +50,12 @@ class TestBaseModel(unittest.TestCase):
         self.base_model.save()
         self.assertNotEqual(old_updated_at, self.base_model.updated_at)
         self.assertIsInstance(self.base_model.updated_at, datetime)
+
+    def test_str(self):
+        """Tests the __str__ method"""
+        expected_str = f"[BaseModel]\
+        ({self.base_model.id}) {self.base_model.__dict__}"
+        self.assertEqual(str(self.base_model), expected_str)
 
     def test_to_dict(self):
         """Test the to_dict method"""
