@@ -45,14 +45,14 @@ class HBNBCommand(cmd.Cmd):
         """To create instances"""
         if not arg:
             print("** class name missing **")
+        my_data = arg.split(arg)
+        cls = globals().get(my_data[0])
+        if cls:
+            my_model = cls()
+            print(my_model.id)
+            my_model.save()
         else:
-            cls = globals().get(arg)
-            if cls:
-                my_model = cls()
-                my_model.save()
-                print(my_model.id)
-            else:
-                print("** class doesn't exist **")
+            print("** class doesn't exist **")
 
     def help_create(self):
         print("create: Creates a new instance of BaseModel, \
