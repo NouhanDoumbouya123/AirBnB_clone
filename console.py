@@ -193,18 +193,6 @@ class HBNBCommand(cmd.Cmd):
             setattr(instance, attr_name, attr_value)
             instance.save()
 
-    def default(self, line):
-        """Handle the default unrecognized command"""
-        parts = shlex.split(".")
-        if len(parts) == 2:
-            class_name, command = parts
-            if command == "all()":
-                self.do_all(class_name)
-            else:
-                print("Unknown syntax")
-        else:
-            print("Enter the correct number of command")
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
