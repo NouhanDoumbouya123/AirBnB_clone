@@ -15,10 +15,7 @@ import sys
 
 class HBNBCommand(cmd.Cmd):
     """A command line simulation"""
-    def __init__(self):
-        """initiate the object"""
-        cmd.Cmd.__init__(self)
-        self.prompt = "(hbnb) "
+    prompt = "(hbnb) "
 
     def do_quit(self, arg):
         """The quit command"""
@@ -46,7 +43,7 @@ class HBNBCommand(cmd.Cmd):
         """To create instances"""
         if not arg:
             print("** class name missing **")
-        my_data = arg.split(arg)
+        my_data = shlex.split(arg)
         cls = globals().get(my_data[0])
         if cls:
             my_model = cls()
