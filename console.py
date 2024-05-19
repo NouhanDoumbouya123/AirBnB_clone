@@ -115,15 +115,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """Printing all clss of base"""
-        classes = {
-                'BaseModel': BaseModel,
-                'User': User,
-                'Amenity': Amenity,
-                'City': City,
-                'Review': Review,
-                'Place': Place,
-                'State': State
-                }
+
         storage.reload()
         objects = storage.all()
         data = shlex.split(arg)
