@@ -3,7 +3,11 @@
 import unittest
 from unittest.mock import patch
 from datetime import datetime
-from models.base_model import BaseModel
+import sys
+import os
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))
+BaseModel = __import__('models').base_model.BaseModel
 
 
 class TestBaseModel(unittest.TestCase):
@@ -28,7 +32,7 @@ class TestBaseModel(unittest.TestCase):
     def test_str(self):
         """Tests the __str__ method"""
         expected_str = f"[BaseModel]\
-        ({self.base_model.id}) {self.base_model.__dict__}"
+ ({self.base_model.id}) {self.base_model.__dict__}"
         self.assertEqual(str(self.base_model), expected_str)
 
     def test_to_dict(self):

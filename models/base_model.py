@@ -22,15 +22,16 @@ class BaseModel:
             for k, v in kwargs.items():
                 if k == '__class__':
                     continue
-                elif k == 'updated_at' or k == 'created_at':
-                    self.__setattr__(k, datetime.datetime.fromisoformat(v))
-                self.__setattr__(k, v)
-        else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            models.storage.new(self)
-            models.storage.save()
+            if hasattr(self, "created_at") and type(self.created_at) is str:
+                self.created_at = datetime.strptime(kwargs["created_at"], time)
+            if hasattr(self, "updated_at") and type(self.updated_at) is str:
+                self.updated_at = datetime.strptime(kwargs["updated_at"], time)
+
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        models.storage.new(self)
+        models.storage.save()
 
     def __str__(self):
         """Returns the string representation"""
