@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../..')))
 BaseModel = __import__('models.base_model').BaseModel
 
+
 class TestBaseModel(unittest.TestCase):
     """Test the BaseModel class"""
     def setUp(self):

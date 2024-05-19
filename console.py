@@ -108,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
         objects = storage.all()
         key = f"{name}.{id}"
         if key in objects:
-            del(objects[key])
+            del (objects[key])
             storage.save()
         else:
             print("** no instance found **")
@@ -171,6 +171,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             setattr(my_instance, my_data[2], my_data[3])
         storage.save()
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
