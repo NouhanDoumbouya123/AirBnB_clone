@@ -98,7 +98,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         if len(args) < 2:
-            print("** cls id missing **")
+            print("** instance id missing **")
             return
         else:
             name, id = args
@@ -111,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
             del(objects[key])
             storage.save()
         else:
-            print("** no cls found **")
+            print("** no instance found **")
 
     def do_all(self, arg):
         """Printing all clss of base"""
@@ -141,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-def do_update(self, arg):
+    def do_update(self, arg):
         """
         Updates an instance based on the class name and
         id by adding or updating attribute
