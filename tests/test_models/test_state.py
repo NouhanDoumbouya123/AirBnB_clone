@@ -9,7 +9,13 @@ import pycodestyle
 import unittest
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+# Get the absolute path of the parent
+# directory (two levels up from the current file)
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+
+# Insert the parent directory path at the beginning of the sys.path list
+sys.path.insert(0, parent_dir)
+
 BaseModel = __import__("models").base_model.BaseModel
 state = __import__("models").state
 State = state.State
