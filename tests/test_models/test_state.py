@@ -9,11 +9,9 @@ import pycodestyle
 import unittest
 import sys
 import os
-# Add the project root directory to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-
-from models.base_model import BaseModel
-from models import state
+BaseModel = __import__("models").base_model.BaseModel
+state = __import__("models").state
 State = state.State
 
 
