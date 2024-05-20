@@ -24,7 +24,7 @@ class HBNBCommand(cmd.Cmd):
         "Amenity": Amenity,
         "Place": Place,
         "Review": Review
-            }
+    }
 
     def do_nothing(self, arg):
         """Does nothing"""
@@ -49,11 +49,11 @@ class HBNBCommand(cmd.Cmd):
               --terminates the application")
 
     def emptyline(self):
-        """Overide the emptyline method"""
+        """Override the emptyline method"""
         pass
 
     def do_create(self, arg):
-        """To create clss"""
+        """To create class"""
         if not arg:
             print("** class name missing **")
             return
@@ -66,11 +66,11 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def help_create(self):
-        print("create: Creates a new cls of BaseModel, \
+        print("create: Creates a new instance of BaseModel, \
               saves it (to the JSON file) and prints the id")
 
     def do_show(self, arg):
-        """To show the clss"""
+        """To show the class"""
         args = shlex.split(arg)
         if len(args) < 1:
             print("** class name missing **")
@@ -109,13 +109,13 @@ class HBNBCommand(cmd.Cmd):
         objects = storage.all()
         key = f"{name}.{id}"
         if key in objects:
-            del (objects[key])
+            del objects[key]
             storage.save()
         else:
             print("** no instance found **")
 
     def do_all(self, arg):
-        """Printing all clss of base"""
+        """Printing all instances of a class"""
 
         storage.reload()
         objects = storage.all()
@@ -150,7 +150,7 @@ class HBNBCommand(cmd.Cmd):
         if my_data[0] not in HBNBCommand.my_dict.keys():
             print("** class doesn't exist **")
             return
-        if (len(my_data) == 1):
+        if len(my_data) == 1:
             print("** instance id missing **")
             return
         try:
@@ -159,10 +159,10 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
             return
-        if (len(my_data) == 2):
+        if len(my_data) == 2:
             print("** attribute name missing **")
             return
-        if (len(my_data) == 3):
+        if len(my_data) == 3:
             print("** value missing **")
             return
         my_instance = objs_dict[key]
@@ -174,7 +174,7 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_count(self, arg):
-        """count the Objects"""
+        """Count the objects"""
         count = 0
         storage.reload()
         objects = storage.all()
@@ -186,25 +186,34 @@ class HBNBCommand(cmd.Cmd):
                     count += 1
         print(count)
 
-
     def default(self, arg):
         """When no command matched it"""
         val = {
             "all": self.do_all,
             "count": self.do_count,
-            "destroy": self.do_destroy
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update
         }
         arg = arg.strip()
         values = arg.split(".")
         if len(values) != 2:
-            super().default(self, arg)
+            super().default(arg)
             return
         class_name = values[0]
         command = values[1].split("(")[0]
-        command_line = ""
-        command_line += class_name
-        if command in val.keys():
-            val[command](command_line)
+        if command == "update":
+            args = values[1].split("(")[1].split(")")[0].split(", ")
+            if len(args) == 3:
+                command_line = f"{class_name} {args[0]} {args[1]} {args[2]}"
+                self.do_update(command_line)
+                return
+        else:
+            command_line = class_name
+            if command in val.keys():
+                args = values[1].split("(")[1].split(")")[0]
+                command_line += " " + args
+                val[command](command_line)
 
 
 if __name__ == "__main__":
