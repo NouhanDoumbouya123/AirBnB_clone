@@ -191,7 +191,8 @@ class HBNBCommand(cmd.Cmd):
         """When no command matched it"""
         val = {
             "all": self.do_all,
-            "count": self.do_count
+            "count": self.do_count,
+            "destroy": self.do_destroy
         }
         arg = arg.strip()
         values = arg.split(".")
