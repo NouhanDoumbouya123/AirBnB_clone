@@ -173,10 +173,24 @@ class HBNBCommand(cmd.Cmd):
             setattr(my_instance, my_data[2], my_data[3])
         storage.save()
 
+    def do_count(self, arg):
+        count = 0
+        storage.reload()
+        objects = storage.all()
+        args = shlex.split(arg)
+        class_name = args[0]
+        if class_name in HBNBCommand.my_dict.keys():
+            for key in objects:
+                if args[0] in key:
+                    count += 1
+        print(count)
+
+
     def default(self, arg):
         """When no command matched it"""
         val = {
-            "all": self.do_all
+            "all": self.do_all,
+            "count": self.do_count
         }
         arg = arg.strip()
         values = arg.split(".")
@@ -186,6 +200,7 @@ class HBNBCommand(cmd.Cmd):
         class_name = values[0]
         command = values[1].split("(")[0]
         command_line = ""
+        command_line += class_name
         if command in val.keys():
             val[command](command_line)
 
