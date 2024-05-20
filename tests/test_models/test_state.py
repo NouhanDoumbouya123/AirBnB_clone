@@ -5,10 +5,15 @@ Contains the TestStateDocs classes
 
 from datetime import datetime
 import inspect
-from models import state
-from models.base_model import BaseModel
-import pep8
+import pycodestyle
 import unittest
+import sys
+import os
+# Add the project root directory to sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from models.base_model import BaseModel
+from models import state
 State = state.State
 
 
@@ -19,17 +24,10 @@ class TestStateDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.state_f = inspect.getmembers(State, inspect.isfunction)
 
-    def test_pep8_conformance_state(self):
-        """Test that models/state.py conforms to PEP8."""
-        pep8s = pep8.StyleGuide(quiet=True)
-        result = pep8s.check_files(['models/state.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
-
-    def test_pep8_conformance_test_state(self):
-        """Test that tests/test_models/test_state.py conforms to PEP8."""
-        pep8s = pep8.StyleGuide(quiet=True)
-        result = pep8s.check_files(['tests/test_models/test_state.py'])
+    def test_pycodestyle_conformance_state(self):
+        """Test that models/state.py conforms to pycodestyle."""
+        pycodestyles = pycodestyle.StyleGuide(quiet=True)
+        result = pycodestyles.check_files(['models/state.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -97,3 +95,7 @@ class TestState(unittest.TestCase):
         state = State()
         string = "[State] ({}) {}".format(state.id, state.__dict__)
         self.assertEqual(string, str(state))
+
+
+if __name__ == "__main__":
+    unittest.main()
