@@ -27,3 +27,4 @@ All the code is tested with the unittest module. The test for the classes are in
 
 ## Authors
 Abderrahmane Bouzemlal - AbderrahmaneBouzemlal
+Nouhan  Doumbouya      - NouhanDoumBouya123
