@@ -104,6 +104,7 @@ class HBNBCommand(cmd.Cmd):
             name, id = args
         if name not in HBNBCommand.my_dict.keys():
             print("** class doesn't exist **")
+            return
         storage.reload()
         objects = storage.all()
         key = f"{name}.{id}"
