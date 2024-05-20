@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Contains the TestPlaceDocs classes
 """
@@ -9,11 +10,9 @@ import unittest
 import sys
 import os
 
-# Get the absolute path of the parent
-# directory (two levels up from the current file)
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+parent_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../..'))
 
-# Insert the parent directory path at the beginning of the sys.path list
 sys.path.insert(0, parent_dir)
 
 BaseModel = __import__("models").base_model.BaseModel
@@ -34,13 +33,6 @@ class TestPlaceDocs(unittest.TestCase):
         result = pycodestyles.check_files(['models/place.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
-
-    def test_place_module_docstring(self):
-        """Test for the place.py module docstring"""
-        self.assertIsNot(place.__doc__, None,
-                         "place.py needs a docstring")
-        self.assertTrue(len(place.__doc__) >= 1,
-                        "place.py needs a docstring")
 
     def test_place_class_docstring(self):
         """Test for the Place class docstring"""

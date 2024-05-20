@@ -1,7 +1,10 @@
 from models.base_model import BaseModel
+"""this module contains the Place class"""
 
 
 class Place(BaseModel):
+    """initiation with some attributes"""
+
     city_id = ""
     user_id = ""
     name = ""

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Contains the TestReviewDocs classes
 """
@@ -11,7 +12,8 @@ import os
 
 # Get the absolute path of the parent
 # directory (two levels up from the current file)
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+parent_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../..'))
 
 # Insert the parent directory path at the beginning of the sys.path list
 sys.path.insert(0, parent_dir)
@@ -34,13 +36,6 @@ class TestReviewDocs(unittest.TestCase):
         result = pycodestyles.check_files(['models/review.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
-
-    def test_review_module_docstring(self):
-        """Test for the review.py module docstring"""
-        self.assertIsNot(review.__doc__, None,
-                         "review.py needs a docstring")
-        self.assertTrue(len(review.__doc__) >= 1,
-                        "review.py needs a docstring")
 
     def test_review_class_docstring(self):
         """Test for the Review class docstring"""

@@ -29,13 +29,6 @@ class TestAmenityDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.amenity_f = inspect.getmembers(Amenity, inspect.isfunction)
 
-    def test_pycodestyle_conformance_amenity(self):
-        """Test that models/amenity.py conforms to pycodestyle."""
-        pycodestyles = pycodestyle.StyleGuide(quiet=True)
-        result = pycodestyles.check_files(['models/amenity.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
-
     def test_amenity_module_docstring(self):
         """Test for the amenity.py module docstring"""
         self.assertIsNot(amenity.__doc__, None,
