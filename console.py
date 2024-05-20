@@ -174,6 +174,7 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_count(self, arg):
+        """count the Objects"""
         count = 0
         storage.reload()
         objects = storage.all()
