@@ -173,6 +173,24 @@ class HBNBCommand(cmd.Cmd):
             setattr(my_instance, my_data[2], my_data[3])
         storage.save()
 
+    def default(self, arg):
+        val = {
+            "all": self.do_all
+        }
+        arg = arg.strip()
+        values = arg.split(".")
+        if len(values) != 2:
+            super().default(self, arg)
+            return
+        class_name = values[0]
+        command = values[1].split("(")[0]
+        command_line = ""
+        if command in val.keys():
+            val[command](command_line)
+
+
+
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
