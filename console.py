@@ -174,6 +174,7 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def default(self, arg):
+        """When no command matched it"""
         val = {
             "all": self.do_all
         }
