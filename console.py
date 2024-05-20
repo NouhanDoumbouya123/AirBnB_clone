@@ -191,7 +191,9 @@ class HBNBCommand(cmd.Cmd):
         """When no command matched it"""
         val = {
             "all": self.do_all,
-            "count": self.do_count
+            "count": self.do_count,
+            "show": self.do_show,
+            "destroy":self.do_destroy
         }
         arg = arg.strip()
         values = arg.split(".")
@@ -200,8 +202,15 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = values[0]
         command = values[1].split("(")[0]
-        command_line = ""
-        command_line += class_name
+        command_line = "" + class_name
+        args = values[1].split("(")[1]
+        arguments = ""
+        for i in args:
+            if i in ['"', ')']:
+                continue
+            else:
+                arguments += i
+        command_line +=  " " + arguments
         if command in val.keys():
             val[command](command_line)
 
