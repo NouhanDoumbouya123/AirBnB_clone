@@ -245,7 +245,7 @@ class HBNBCommand(cmd.Cmd):
                 args = values[1].split("(")[1].split(")")[0].split(", ", 1)
                 if len(args) == 2:
                     command_line = f"{class_name} {args[0]} {args[1]}"
-                    self.do_update2(command_line)
+                    self.do_update_dict(command_line)
             args = values[1].split("(")[1].split(")")[0].split(", ")
             if len(args) == 3:
                 command_line = f"{class_name} {args[0]} {args[1]} {args[2]}"
