@@ -173,38 +173,40 @@ class HBNBCommand(cmd.Cmd):
             setattr(my_instance, my_data[2], my_data[3])
         storage.save()
 
-    def do_update2(self, arg):
-        args = shlex.split(arg)[:3]
+    def do_update_dict(self, arg):
+        """update using a dictionary"""
+        if not arg:
+            print("** class name missing **")
+            return
+        my_dictionary = "{" + arg.split("{")[1]
+        my_data = shlex.split(arg)
         storage.reload()
         objs_dict = storage.all()
-        if args[0] not in HBNBCommand.my_dict.keys():
+        if my_data[0] not in HBNBCommand.my_dict.keys():
             print("** class doesn't exist **")
             return
-        if len(args) == 1:
+        if (len(my_data) == 1):
             print("** instance id missing **")
             return
         try:
-            key = args[0] + "." + args[1]
+            key = my_data[0] + "." + my_data[1]
             objs_dict[key]
         except KeyError:
             print("** no instance found **")
             return
-        if len(args) == 2:
-            print("** The Dictionary representation is missing **")
+        if (my_dictionary == "{"):
+            print("** attribute name missing **")
             return
-        my_instance = objs_dict[key]
-        args_dict = args[2]
-        args_dict = args_dict.replace('"', "'")
-        args_dict = '"' + args_dict + '"'
-        arguments = json.loads(args_dict)
 
-        print(type(arguments))
-        for k in args_dict:
-            if hasattr(my_instance, k):
-                data_type = type(getattr(my_instance, k))
-                setattr(my_instance, k, data_type(args_dict[k]))
-        else:
-            setattr(my_instance, k, args_dict[k])
+        my_dictionary = my_dictionary.replace("\'", "\"")
+        my_dictionary = json.loads(my_dictionary)
+        my_instance = objs_dict[key]
+        for my_key in my_dictionary:
+            if hasattr(my_instance, my_key):
+                data_type = type(getattr(my_instance, my_key))
+                setattr(my_instance, my_key, my_dictionary[my_key])
+            else:
+                setattr(my_instance, my_key, my_dictionary[my_key])
         storage.save()
 
     def do_count(self, arg):
@@ -228,7 +230,7 @@ class HBNBCommand(cmd.Cmd):
             "show": self.do_show,
             "destroy": self.do_destroy,
             "update": self.do_update,
-            "update2": self.do_update2
+            "update2": self.do_update_dict
         }
         arg = arg.strip()
         values = arg.split(".")
@@ -239,7 +241,7 @@ class HBNBCommand(cmd.Cmd):
         command = values[1].split("(")[0]
         if command == "update":
             if "{" in values[1]:
-                command = "update2"
+                command = "update_dict"
                 args = values[1].split("(")[1].split(")")[0].split(", ", 1)
                 if len(args) == 2:
                     command_line = f"{class_name} {args[0]} {args[1]}"
