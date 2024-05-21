@@ -173,6 +173,40 @@ class HBNBCommand(cmd.Cmd):
             setattr(my_instance, my_data[2], my_data[3])
         storage.save()
 
+    def do_update2(self, arg):
+        args = arg.split(" ", 2)
+        storage.reload()
+        objs_dict = storage.all()
+        if args[0] not in HBNBCommand.my_dict.keys():
+            print("** class doesn't exist **")
+            return
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
+        try:
+            key = args[0] + "." + args[1]
+            objs_dict[key]
+        except KeyError:
+            print("** no instance found **")
+            return
+        if len(args) == 2:
+            print("** The Dictionary representation is missing **")
+            return
+        my_instance = objs_dict[key]
+        args_dict = args[2]
+        args_dict = args_dict.replace('"', "'")
+        args_dict = '"' + args_dict + '"'
+        arguments = json.loads(args_dict)
+
+        print(type(arguments))
+        for k in args_dict:
+            if hasattr(my_instance, k):
+                data_type = type(getattr(my_instance, k))
+                setattr(my_instance, k, data_type(args_dict[k]))
+        else:
+            setattr(my_instance, k, args_dict[k])
+        storage.save()
+
     def do_count(self, arg):
         """Count the objects"""
         count = 0
@@ -193,7 +227,8 @@ class HBNBCommand(cmd.Cmd):
             "count": self.do_count,
             "show": self.do_show,
             "destroy": self.do_destroy,
-            "update": self.do_update
+            "update": self.do_update,
+            "update2": self.do_update2
         }
         arg = arg.strip()
         values = arg.split(".")
@@ -203,6 +238,12 @@ class HBNBCommand(cmd.Cmd):
         class_name = values[0]
         command = values[1].split("(")[0]
         if command == "update":
+            if "{" in values[1]:
+                command = "update2"
+                args = values[1].split("(")[1].split(")")[0].split(", ", 1)
+                if len(args) == 2:
+                    command_line = f"{class_name} {args[0]} {args[1]}"
+                    self.do_update2(command_line)
             args = values[1].split("(")[1].split(")")[0].split(", ")
             if len(args) == 3:
                 command_line = f"{class_name} {args[0]} {args[1]} {args[2]}"
