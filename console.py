@@ -174,7 +174,7 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_update2(self, arg):
-        args = arg.split(" ", 2)
+        args = shlex.split(arg)[:3]
         storage.reload()
         objs_dict = storage.all()
         if args[0] not in HBNBCommand.my_dict.keys():
