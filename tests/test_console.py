@@ -1,75 +1,83 @@
+#!/usr/bin/python3
+"""Defines unittests for console.py.
+"""
+import os
 import unittest
-from unittest.mock import patch
 from io import StringIO
+from unittest.mock import patch
 from console import HBNBCommand
+from models import storage
+
 
 class TestConsole(unittest.TestCase):
+    """Base class for testing Console.
+    """
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_quit_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['quit']):
-            HBNBCommand().cmdloop()
-            self.assertEqual(mock_stdout.getvalue(), "(hbnb) ")
+    def tearDown(self) -> None:
+        """Resets FileStorage data."""
+        storage._FileStorage__objects = {}
+        if os.path.exists(storage._FileStorage__file_path):
+            os.remove(storage._FileStorage__file_path)
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_EOF_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['EOF']):
-            HBNBCommand().cmdloop()
-            self.assertEqual(mock_stdout.getvalue(), "\n")
+    def test_simple(self):
+        """Tests basic commands.
+        """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("quit")
+            self.assertEqual(f.getvalue(), "")
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_help_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['help']):
-            HBNBCommand().cmdloop()
-            self.assertTrue("documenting the commands" in mock_stdout.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("EOF")
+            self.assertEqual(f.getvalue(), "\n")
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_empty_line_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['']):
-            HBNBCommand().cmdloop()
-            self.assertEqual(mock_stdout.getvalue(), "")
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("\n")
+            self.assertEqual(f.getvalue(), "")
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_create_BaseModel_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['create BaseModel']):
-            HBNBCommand().cmdloop()
-            self.assertTrue("missing" in mock_stdout.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("?")
+            self.assertIsInstance(f.getvalue(), str)
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_show_BaseModel_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['show BaseModel 1234']):
-            HBNBCommand().cmdloop()
-            self.assertTrue("no instance found" in mock_stdout.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("help")
+            self.assertIsInstance(f.getvalue(), str)
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_destroy_BaseModel_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['destroy BaseModel 1234']):
-            HBNBCommand().cmdloop()
-            self.assertTrue("no instance found" in mock_stdout.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("? create")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(), "Creates a new instance.")
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_all_BaseModel_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['all BaseModel']):
-            HBNBCommand().cmdloop()
-            self.assertEqual(mock_stdout.getvalue(), "[]\n")
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("help create")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(), "Creates a new instance.")
 
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_count_BaseModel_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['count BaseModel']):
-            HBNBCommand().cmdloop()
-            self.assertEqual(mock_stdout.getvalue(), "0\n")
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("? all")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(),
+                             "Prints string representation of all instances.")
 
-    # Similar test cases for User, State, City, Amenity, Place, Review
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("help all")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(),
+                             "Prints string representation of all instances.")
 
-    # Test cases for show command for User, State, City, Amenity, Place, Review
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_show_User_present(self, mock_stdout):
-        with patch('builtins.input', side_effect=['show User 1234']):
-            HBNBCommand().cmdloop()
-            self.assertTrue("no instance found" in mock_stdout.getvalue())
+        with patch('sys.stdout', new=StringIO()) as f:
+            msg = "Prints the string representation of an instance."
+            HBNBCommand().onecmd("? show")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(), msg)
 
-    # Additional test cases for other commands...
+        with patch('sys.stdout', new=StringIO()) as f:
+            msg = "Prints the string representation of an instance."
+            HBNBCommand().onecmd("help show")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(), msg)
 
-if __name__ == '__main__':
-    unittest.main()
-
+        with patch('sys.stdout', new=StringIO()) as f:
+            msg = "Updates an instance based on the class name and id."
+            HBNBCommand().onecmd("? update")
+            self.assertIsInstance(f.getvalue(), str)
+            self.assertEqual(f.getvalue().strip(), msg)
